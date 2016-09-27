@@ -99,4 +99,3 @@ Now we have some articles about it, so I'll link some of then.
 ## JitPack
 * [JitPack](https://jitpack.io/)
 * [Guide for Gradle Projects](https://jitpack.io/docs/BUILDING/#gradle-projects)
-* [GradleModular](https://github.com/jitpack/gradle-modular)
