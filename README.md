@@ -50,7 +50,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.github.brunodles:IpGetter:0.1'
+        classpath 'com.github.brunodles:IpGetter:-SNAPSHOT'
     }
 }
 apply plugin: 'com.github.brunodles.IpGetter'
