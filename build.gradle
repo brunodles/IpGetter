@@ -1,15 +1,46 @@
+apply plugin: 'maven'
 apply plugin: 'groovy'
+apply plugin: "net.ltgt.apt"
+
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
+    compileOnly 'com.brunodles:autoplugin-annotation:1.0.0'
+    apt 'com.brunodles:autoplugin-processor:1.0.0'
 }
 
-apply plugin: 'maven'
+ext.maven = [
+        group   : "com.brunodles",
+        version : '1.0.0',
+        repo    : "TempRepo",
+        name    : "AutoPlugin",
+        artifact: "autoplugin",
+        site    : "https://github.com/brunodles/AutoPlugin",
+        git     : "https://github.com/brunodles/AutoPlugin.git",
+        tag     : 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+]
 
-repositories {
-    mavenCentral()
-}
-
-group 'com.github.brunodles'
-version '0.1'
+ext.maven_publish = [
+        artifact: "$maven.artifact-processor",
+        name    : "$maven.name Processor"
+]
+apply from: rootProject.file('gradle/publish.gradle')
