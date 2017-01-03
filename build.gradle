@@ -1,6 +1,5 @@
 apply plugin: 'maven'
 apply plugin: 'groovy'
-apply plugin: "net.ltgt.apt"
 
 buildscript {
     repositories {
@@ -14,6 +13,7 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
+apply plugin: "net.ltgt.apt"
 
 repositories {
     mavenLocal()
@@ -32,15 +32,15 @@ ext.maven = [
         group   : "com.brunodles",
         version : '1.0.0',
         repo    : "TempRepo",
-        name    : "AutoPlugin",
-        artifact: "autoplugin",
-        site    : "https://github.com/brunodles/AutoPlugin",
-        git     : "https://github.com/brunodles/AutoPlugin.git",
+        name    : "IpGetter",
+        artifact: "ipgetter",
+        site    : "https://github.com/brunodles/IpGetter",
+        git     : "https://github.com/brunodles/IpGetter.git",
         tag     : 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
 ]
 
 ext.maven_publish = [
-        artifact: "$maven.artifact-processor",
-        name    : "$maven.name Processor"
+        artifact: maven.artifact,
+        name    : maven.name
 ]
 apply from: rootProject.file('gradle/publish.gradle')
