@@ -1,11 +1,8 @@
-apply plugin: 'maven'
-apply plugin: 'groovy'
-
 buildscript {
     repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
         mavenLocal()
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
         mavenCentral()
     }
     dependencies {
@@ -13,12 +10,19 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
+
+apply plugin: 'maven'
+apply plugin: 'groovy'
 apply plugin: "net.ltgt.apt"
+
+compileGroovy {
+    groovyOptions.javaAnnotationProcessing = true
+}
 
 repositories {
     mavenLocal()
-    mavenCentral()
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
