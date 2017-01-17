@@ -1,0 +1,4 @@
+api.use_mock = false
+api.local_ip_interface = wlan0
+api.local_port = 8080
+Failed to get ip
