@@ -15,6 +15,10 @@ fun given(text: String, block: () -> Unit) {
     StaticRunnerSupport.describe("Given $text", block)
 }
 
+fun context(text: String, block: () -> Unit) {
+    StaticRunnerSupport.describe("Context $text", block)
+}
+
 fun on(text: String, block: () -> Unit) {
     StaticRunnerSupport.describe("On $text", block)
 }
@@ -26,3 +30,5 @@ fun with(text: String, block: () -> Unit) {
 fun xwith(text: String, block: () -> Unit) {}
 
 fun xit(text: String, block: () -> Unit) {}
+
+fun xon(text: String, block: () -> Unit) {}
