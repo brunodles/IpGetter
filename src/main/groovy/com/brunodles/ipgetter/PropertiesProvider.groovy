@@ -1,6 +1,6 @@
 package com.brunodles.ipgetter
 
-class PropertiesProvider implements Provider {
+class PropertiesProvider implements Provider<Properties> {
 
     private Properties properties
 

@@ -2,7 +2,7 @@ package com.brunodles.ipgetter
 
 import org.gradle.api.Project
 
-class ProjectProvider implements Provider {
+class ProjectProvider implements Provider<Project> {
     private Project project
 
     ProjectProvider(Project project) {
