@@ -13,6 +13,7 @@ import java.io.PrintStream
 import java.net.InetAddress
 import java.net.InterfaceAddress
 import java.net.NetworkInterface
+import java.net.networkInterface
 import java.util.*
 
 @RunWith(OleasterSuiteRunner::class)
@@ -58,17 +59,11 @@ class ApiTest {
                     }
                 }
             }
-            xwith("properties file that enables mock") {
-                before {
-                    properties = Properties().loadRes("mock_api_enable.properties")
-
+            with("properties file that enables mock") {
+                before { properties = Properties().loadRes("mock_api_enable.properties") }
+                beforeEach {
                     val provider: NetworkInterfaceProvider = mock()
-                    val network: NetworkInterface = mock()
-                    val interfaceAddress: InterfaceAddress = mock()
-                    val inetAddress: InetAddress = mock()
-                    once(provider.getByName(eq("wlan0"))).thenReturn(network)
-                    once(network.interfaceAddresses).thenReturn(listOf(interfaceAddress))
-                    once(inetAddress.hostName).thenReturn(EXPECTED_ADDRESS)
+                    once(provider.getNetworkInterfaceIp(eq("wlan0"))).thenReturn("10.0.0.42")
 
                     api!!.setNetworkInterfaceProvider(provider)
                 }
