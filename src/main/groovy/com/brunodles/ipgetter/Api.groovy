@@ -59,20 +59,8 @@ class Api {
     String ipFrom(String propInterface) {
         for (ipInterface in [propInterface, 'wlan0', 'eth0']) {
             if (ipInterface == null) continue
-            String ip = getNetworkInterfaceIp(ipInterface)
+            String ip = networkInterfaceProvider.getNetworkInterfaceIp(ipInterface)
             if (ip != null) {
-                return ip
-            }
-        }
-        return null
-    }
-
-    String getNetworkInterfaceIp(String interfaceName) {
-        NetworkInterface iface = networkInterfaceProvider.getByName(interfaceName)
-        if (iface == null) return null
-        for (InterfaceAddress address : iface.getInterfaceAddresses()) {
-            String ip = address.getAddress().getHostAddress()
-            if (ip.length() <= 15) {
                 return ip
             }
         }
