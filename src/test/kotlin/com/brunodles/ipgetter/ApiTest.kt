@@ -10,10 +10,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
-import java.net.InetAddress
-import java.net.InterfaceAddress
-import java.net.NetworkInterface
-import java.net.networkInterface
 import java.util.*
 
 @RunWith(OleasterSuiteRunner::class)
