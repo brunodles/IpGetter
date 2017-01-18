@@ -8,10 +8,11 @@ class Api {
     public static final String LOCAL_IP_INTERFACE = 'api.local_ip_interface'
     public static final String LOCAL_PORT = 'api.local_port'
 
-    private final Provider provider
+    private final ConfigProvider config
+    private NetworkInterfaceProvider networkInterfaceProvider = new DefaultNetworkInterfaceProvider()
 
-    private Api(Provider provider) {
-        this.provider = provider
+    private Api(ConfigProvider config) {
+        this.config = config
     }
 
     static Api from(Properties properties) {
@@ -19,43 +20,43 @@ class Api {
     }
 
     static Api from(Project project) {
-        return new Api(new ProjectProvider(project))
+        return new Api(new ProjectConfigProvider(project))
     }
 
     String localIpOr(String defaultUrl) {
         if (!validProperties()) return defaultUrl
 
-        String propInterface = provider.get(LOCAL_IP_INTERFACE)
-        def port = provider.get(LOCAL_PORT)
+        String propInterface = config.get(LOCAL_IP_INTERFACE)
+        def port = config.get(LOCAL_PORT)
         def ip = ipFrom(propInterface)
         if (!ip) return defaultUrl
         return "http://${ip}:${port}"
     }
 
     boolean validProperties() {
-        return (provider.contains(USE_MOCK)
-                && provider.get(USE_MOCK).toBoolean()
-                && provider.contains(LOCAL_IP_INTERFACE)
-                && provider.contains(LOCAL_PORT))
+        return (config.contains(USE_MOCK)
+                && config.get(USE_MOCK).toBoolean()
+                && config.contains(LOCAL_IP_INTERFACE)
+                && config.contains(LOCAL_PORT))
     }
 
     String localUrl() {
-        if (!provider.contains(LOCAL_IP_INTERFACE)) return null
-        String propInterface = provider.get(LOCAL_IP_INTERFACE)
-        def port = provider.get(LOCAL_PORT)
+        if (!config.contains(LOCAL_IP_INTERFACE)) return null
+        String propInterface = config.get(LOCAL_IP_INTERFACE)
+        def port = config.get(LOCAL_PORT)
         def ip = ipFrom(propInterface)
         if (!ip) return null
         return "http://${ip}:${port}"
     }
 
     void printProperties() {
-        printProp provider, USE_MOCK
-        printProp provider, LOCAL_IP_INTERFACE
-        printProp provider, LOCAL_PORT
+        printProp config, USE_MOCK
+        printProp config, LOCAL_IP_INTERFACE
+        printProp config, LOCAL_PORT
         println localIpOr('Failed to get ip')
     }
 
-    static String ipFrom(String propInterface) {
+    String ipFrom(String propInterface) {
         for (ipInterface in [propInterface, 'wlan0', 'eth0']) {
             if (ipInterface == null) continue
             String ip = getNetworkInterfaceIp(ipInterface)
@@ -66,8 +67,8 @@ class Api {
         return null
     }
 
-    static String getNetworkInterfaceIp(String interfaceName) {
-        NetworkInterface iface = NetworkInterface.getByName(interfaceName)
+    String getNetworkInterfaceIp(String interfaceName) {
+        NetworkInterface iface = networkInterfaceProvider.getByName(interfaceName)
         if (iface == null) return null
         for (InterfaceAddress address : iface.getInterfaceAddresses()) {
             String ip = address.getAddress().getHostAddress()
@@ -78,7 +79,11 @@ class Api {
         return null
     }
 
-    static def printProp(Provider provider, String name) {
+    void setNetworkInterfaceProvider(NetworkInterfaceProvider networkInterfaceProvider) {
+        this.networkInterfaceProvider = networkInterfaceProvider
+    }
+
+    static def printProp(ConfigProvider provider, String name) {
         if (provider.contains(name))
             println "$name = ${provider.get(name)}"
         else

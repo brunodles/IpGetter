@@ -18,7 +18,7 @@ import java.util.*
 private val TEST_KEY: String = "this.is.my.key"
 private val TEST_VALUE: String = "Wow, this is a property"
 
-abstract class ProviderTest<PROVIDER : Provider<SOURCE>, SOURCE>(
+abstract class ProviderTest<PROVIDER : ConfigProvider<SOURCE>, SOURCE>(
         providerBuilder: (SOURCE) -> PROVIDER,
         sourceBuilderGood: () -> SOURCE,
         sourceBuilderBad: () -> SOURCE) {
@@ -71,8 +71,8 @@ abstract class ProviderTest<PROVIDER : Provider<SOURCE>, SOURCE>(
 }
 
 @RunWith(OleasterSuiteRunner::class)
-class ProjectProviderTest : ProviderTest<ProjectProvider, Project>(
-        ::ProjectProvider,
+class ProjectConfigProviderTest : ProviderTest<ProjectConfigProvider, Project>(
+        ::ProjectConfigProvider,
         {
             val source: Project = mock()
             once(source.hasProperty(eq(TEST_KEY))).thenReturn(true)
@@ -87,7 +87,7 @@ class ProjectProviderTest : ProviderTest<ProjectProvider, Project>(
         })
 
 @RunWith(OleasterSuiteRunner::class)
-class PropertiesProviderTest : ProviderTest<PropertiesProvider, Properties>(
+class PropertiesConfigProviderTest : ProviderTest<PropertiesProvider, Properties>(
         ::PropertiesProvider,
         {
             val source: Properties = mock()

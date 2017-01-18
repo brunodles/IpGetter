@@ -2,10 +2,10 @@ package com.brunodles.ipgetter
 
 import org.gradle.api.Project
 
-class ProjectProvider implements Provider<Project> {
+class ProjectConfigProvider implements ConfigProvider<Project> {
     private Project project
 
-    ProjectProvider(Project project) {
+    ProjectConfigProvider(Project project) {
         this.project = project
     }
 

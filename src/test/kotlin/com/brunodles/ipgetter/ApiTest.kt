@@ -3,15 +3,22 @@ package com.brunodles.ipgetter
 import com.brunodles.oleaster.suiterunner.OleasterSuiteRunner
 import com.brunodles.test.helper.*
 import com.mscharhag.oleaster.runner.StaticRunnerSupport.*
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import java.net.InetAddress
+import java.net.InterfaceAddress
+import java.net.NetworkInterface
 import java.util.*
 
 @RunWith(OleasterSuiteRunner::class)
 class ApiTest {
+
+    val EXPECTED_ADDRESS = "http://10.0.0.42:8080"
 
     var api: Api? = null
     var properties: Properties? = null
@@ -51,8 +58,20 @@ class ApiTest {
                     }
                 }
             }
-            with("properties file that enables mock") {
-                before { properties = Properties().loadRes("mock_api_enable.properties") }
+            xwith("properties file that enables mock") {
+                before {
+                    properties = Properties().loadRes("mock_api_enable.properties")
+
+                    val provider: NetworkInterfaceProvider = mock()
+                    val network: NetworkInterface = mock()
+                    val interfaceAddress: InterfaceAddress = mock()
+                    val inetAddress: InetAddress = mock()
+                    once(provider.getByName(eq("wlan0"))).thenReturn(network)
+                    once(network.interfaceAddresses).thenReturn(listOf(interfaceAddress))
+                    once(inetAddress.hostName).thenReturn(EXPECTED_ADDRESS)
+
+                    api!!.setNetworkInterfaceProvider(provider)
+                }
                 on("#validProperties") {
                     it("should return true") {
                         assertThat(api!!.validProperties()).isTrue()
@@ -60,12 +79,12 @@ class ApiTest {
                 }
                 on("#localIpOr, from a parametrized ip") {
                     it("should return the local") {
-                        assertThat(api!!.localIpOr("http://my-api.com")).isEqualTo("http://10.0.0.42:8080")
+                        assertThat(api!!.localIpOr("http://my-api.com")).isEqualTo(EXPECTED_ADDRESS)
                     }
                 }
                 on("#localUrl") {
                     it("should build the url based on properties file") {
-                        assertThat(api!!.localUrl()).isEqualTo("http://10.0.0.42:8080")
+                        assertThat(api!!.localUrl()).isEqualTo(EXPECTED_ADDRESS)
                     }
                 }
                 on("#printProperties") {

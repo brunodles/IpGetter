@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_PARAMETER", "unused")
+
 package com.brunodles.test.helper
 
 import com.mscharhag.oleaster.runner.StaticRunnerSupport
