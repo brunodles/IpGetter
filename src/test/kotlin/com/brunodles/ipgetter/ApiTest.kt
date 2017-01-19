@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
@@ -36,12 +37,18 @@ class ApiTest {
                     }
                     it("should print the properties") {
                         api!!.printProperties()
-                        assertThat(outputStream!!.toString()).isEqualTo(resAsSttring("properties_output_empty"))
+                        assertThat(outputStream!!.toString()).isEqualTo(resAsString("properties_output_empty"))
                     }
                 }
             }
             with("properties file that does not enables mock") {
                 before { properties = Properties().loadRes("mock_api_disable.properties") }
+                beforeEach {
+                    val provider: NetworkInterfaceProvider = mock()
+                    once(provider.getNetworkInterfaceIp(anyString())).thenReturn(null)
+
+                    api!!.setNetworkInterfaceProvider(provider)
+                }
                 includeDisabledMock()
 
                 on("#printProperties") {
@@ -51,7 +58,7 @@ class ApiTest {
                     }
                     it("should print the properties") {
                         api!!.printProperties()
-                        assertThat(outputStream!!.toString()).isEqualTo(resAsSttring("properties_output_disable"))
+                        assertThat(outputStream!!.toString()).isEqualTo(resAsString("properties_output_disable"))
                     }
                 }
             }
@@ -85,7 +92,7 @@ class ApiTest {
                     }
                     it("should print the properties") {
                         api!!.printProperties()
-                        assertThat(outputStream!!.toString()).isEqualTo(resAsSttring("properties_output_enable"))
+                        assertThat(outputStream!!.toString()).isEqualTo(resAsString("properties_output_enable"))
                     }
                 }
             }

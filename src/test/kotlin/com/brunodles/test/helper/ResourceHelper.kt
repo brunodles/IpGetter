@@ -12,5 +12,5 @@ fun Properties.loadRes(path: String): Properties {
 fun resAsStream(path: String): InputStream? =
         ClassLoader.getSystemClassLoader().getResourceAsStream(path)
 
-fun resAsSttring(path: String): String =
+fun resAsString(path: String): String =
         File(ClassLoader.getSystemClassLoader().getResource(path).file).readText()

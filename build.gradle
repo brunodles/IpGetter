@@ -49,7 +49,7 @@ dependencies {
 
 ext.maven = [
         group   : "com.brunodles",
-        version : '1.0.0',
+        version : '1.1.0',
         repo    : "TempRepo",
         name    : "IpGetter",
         artifact: "ipgetter",
