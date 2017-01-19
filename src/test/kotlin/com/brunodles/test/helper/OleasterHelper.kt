@@ -29,6 +29,8 @@ fun with(text: String, block: () -> Unit) {
     StaticRunnerSupport.describe("With $text", block)
 }
 
+fun <T : Any> xgiven(aClass: KClass<T>, block: () -> Unit) {}
+
 fun xwith(text: String, block: () -> Unit) {}
 
 fun xit(text: String, block: () -> Unit) {}

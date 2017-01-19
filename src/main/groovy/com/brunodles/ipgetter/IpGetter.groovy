@@ -4,7 +4,7 @@ import com.brunodles.auto.gradleplugin.AutoPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-@AutoPlugin
+@AutoPlugin(["ipgetter", "com.brunodles.IpGetter"])
 class IpGetter implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.add("localIpOr", localIpOr(project))
