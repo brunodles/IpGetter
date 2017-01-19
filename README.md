@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/brunodles/IpGetter.svg?branch=release)](https://travis-ci.org/brunodles/IpGetter)
 # IpGetter Plugin
 The IpGetter is a plugin which will help us to get the Ip of the current machine to use on a build.gradle.
 
