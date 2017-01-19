@@ -1,15 +1,65 @@
+project.ext.kotlin_version = '1.0.6'
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.6"
+    }
+}
+
 apply plugin: 'groovy'
+apply plugin: "kotlin"
+apply plugin: "net.ltgt.apt"
+
+compileGroovy {
+    groovyOptions.javaAnnotationProcessing = true
+}
+
+repositories {
+    maven { url "https://dl.bintray.com/brunodles/TempRepo/" }
+    jcenter()
+    mavenCentral()
+}
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
+    compileOnly 'com.brunodles:autoplugin-annotation:1.0.1'
+    apt 'com.brunodles:autoplugin-processor:1.0.1'
+
+    testCompile 'junit:junit:4.11'
+
+    testCompile 'org.mockito:mockito-core:2.0.54-beta'
+
+    testCompile 'org.assertj:assertj-core:3.6.1'
+    testCompile 'com.mscharhag.oleaster:oleaster-runner:0.1.2'
+    testCompile 'com.brunodles:oleaster-suiterunner:0.1.1'
+
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testCompile "com.nhaarman:mockito-kotlin:1.1.0"
 }
 
-apply plugin: 'maven'
+ext.maven = [
+        group   : "com.brunodles",
+        version : '1.1.0',
+        repo    : "TempRepo",
+        name    : "IpGetter",
+        artifact: "ipgetter",
+        site    : "https://github.com/brunodles/IpGetter",
+        git     : "https://github.com/brunodles/IpGetter.git",
+        tag     : 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+]
 
-repositories {
-    mavenCentral()
-}
-
-group 'com.github.brunodles'
-version '0.1'
+ext.maven_publish = [
+        artifact: maven.artifact,
+        name    : maven.name
+]
+apply from: rootProject.file('gradle/publish.gradle')
