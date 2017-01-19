@@ -2,6 +2,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
+
 group maven.group
 version maven.version
 
@@ -52,6 +53,10 @@ bintray {
     if (project.hasProperty("bintray.user") && project.hasProperty("bintray.apikey")) {
         user = project.property("bintray.user")
         key = project.property("bintray.apikey")
+    } else if (System.getenv().containsKey('BINTRAY_USER')
+            && System.getenv().containsKey('BINTRAY_APIKEY')) {
+        user = System.getenv('BINTRAY_USER')
+        key = System.getenv('BINTRAY_APIKEY')
     } else {
         logger.info('Bintray user/apikey not found')
     }
@@ -73,3 +78,5 @@ bintray {
         }
     }
 }
+
+project.tasks.getByName('bintrayUpload').dependsOn('install')
