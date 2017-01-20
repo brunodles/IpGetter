@@ -9,25 +9,32 @@ address during development stage, to point to a MockApi or a *under development 
 
 ## BuildTypes, do you know it?
 
-First you may need to know how to use [build types](https://developer.android.com/studio/build/build-variants.html).
-This will help you to change the *API URL* depending on the *build type*.
+Have you ever made a if to change the *api base url*?  
 There's no need to check it with a if like that `if (BuildConfig.DEBUG)`
 or `String API_URL = BuildConfig.DEBUG? "192.168.10.42:3000" : "http://my-real-api.com"`.
-Man, this is ugly, stop doing that.
+
+There are a lot of ways to do that, you can create a [build types](https://developer.android.com/studio/build/build-variants.html) and 
+change the *API URL* depending on the *build type*.
+
+You can enable and disable the test url just by changing you `gradle.properties`.
 
 ## Plugin setup?
 
 You can choose the wanted *network interface* you want to use to get the ip from.
 
-To do that you need to create a new file in your *root project path*. `rootPath/ip.properties`.
+To do that you need to create a new file in your *root project path*. `rootPath/ip.properties`.  
+You can also put these properties into your `gradle.properties`. In your project `rootPath/gradle.properties` 
+or inside `homePath/.gradle/gradle.properties`.
 
-Inside this file you just can create two properties.
+Inside this file you just can create three properties.
+* `api.use_mock` this is the flag to enable your local server
 * `api.local_ip_interface` will be used to define the *network interface*
 * `api.local_port` will be used to define the service port
 
 ### Sample file
 
 ```properties
+api.use_mock=true
 api.local_ip_interface=wlp9s0
 api.local_port=3000
 ```
@@ -39,7 +46,7 @@ Yes you can call methods inside the `build.gradle` files, so do it.
 
 It will be like this
 ```gradle
-buildConfigField "String", "API_URL", "\"${getApiUrl()}\""
+buildConfigField "String", "API_URL", "\"${localIpOr('http://my-real.api')}\""
 ```
 
 ### Sample
@@ -48,10 +55,10 @@ Here is a sample of how the `build.gradle` will end up.
 ```gradle
 buildscript {
     repositories {
-        maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/brunodles/TempRepo" }
     }
     dependencies {
-        classpath 'com.github.brunodles:IpGetter:-SNAPSHOT'
+        classpath 'com.github.brunodles:IpGetter:1.1.0'
     }
 }
 apply plugin: 'com.github.brunodles.IpGetter'
@@ -59,17 +66,28 @@ android {
     ...
     defaultConfig {
         ...
-        buildConfigField "String", "API_URL", '"http://localhost"'
+        buildConfigField "String", "API_URL", "\"${getApiUrl('http://my-real.api')}\""
+    }
+}
+```
+
+You can also change it only on `debug` *build type*
+```gradle
+android {
+    ...
+    defaultConfig {
+        ...
+        buildConfigField "String", "API_URL", "\"http://my-real.api\""
     }
     buildTypes {
         ...
         release {
             ...
-            buildConfigField "String", "API_URL", '"http://my-real-api.com"'
+            // don't change anything on release
         }
         debug {
             ...
-            buildConfigField "String", "API_URL", "\"${getApiUrl()}\""
+            buildConfigField "String", "API_URL", "\"${getApiUrl('http://my-real.api')}\""
         }
     }
 }
