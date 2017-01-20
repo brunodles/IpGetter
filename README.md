@@ -41,7 +41,7 @@ api.local_port=3000
 
 ## Using
 
-Now, in your *app level* `root/app/build.gradle` call the method `getApiUrl()`.
+Now, in your *app level* `root/app/build.gradle` call the method `localIpOr()`.
 Yes you can call methods inside the `build.gradle` files, so do it.
 
 It will be like this
@@ -66,7 +66,7 @@ android {
     ...
     defaultConfig {
         ...
-        buildConfigField "String", "API_URL", "\"${getApiUrl('http://my-real.api')}\""
+        buildConfigField "String", "API_URL", "\"${localIpOr('http://my-real.api')}\""
     }
 }
 ```
@@ -87,7 +87,7 @@ android {
         }
         debug {
             ...
-            buildConfigField "String", "API_URL", "\"${getApiUrl('http://my-real.api')}\""
+            buildConfigField "String", "API_URL", "\"${localIpOr('http://my-real.api')}\""
         }
     }
 }
