@@ -4,7 +4,6 @@ buildscript {
     repositories {
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://dl.bintray.com/brunodles/TempRepo/" }
         mavenCentral()
     }
     dependencies {
@@ -48,19 +47,33 @@ dependencies {
     testCompile "com.nhaarman:mockito-kotlin:1.1.0"
 }
 
-ext.maven = [
-        group   : "com.brunodles",
-        version : '1.1.0',
-        repo    : "TempRepo",
-        name    : "IpGetter",
-        artifact: "ipgetter",
-        site    : "https://github.com/brunodles/IpGetter",
-        git     : "https://github.com/brunodles/IpGetter.git",
-        tag     : 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+ext.scripter = [
+        'gradle/scripter.gradle': 'https://raw.githubusercontent.com/brunodles/GradleHelpers/master/scripter/scripter.gradle',
+        'gradle/publish.gradle' : 'https://raw.githubusercontent.com/brunodles/GradleHelpers/master/publish/single.gradle'
 ]
+apply from: rootProject.file("gradle/scripter.gradle")
 
-ext.maven_publish = [
-        artifact: maven.artifact,
-        name    : maven.name
+def gitPath = "github.com/brunodles/IpGetter"
+ext.publishing = [
+        group          : "com.brunodles",
+        version        : '1.1.0',
+        repo           : "TempRepo",
+        name           : "IpGetter",
+        artifact       : "ipgetter",
+        gitPath        : gitPath,
+        site           : "https://$gitPath",
+        issueTrackerUrl: "https://$gitPath/issues",
+        tag            : 'git rev-parse --abbrev-ref HEAD'.execute().text.trim(),
+        override       : true,
+        desc           : "The IpGetter is a plugin which will help us to get the Ip of the current machine to use on a build.gradle.",
+        license        : [
+                short: "mit",
+                name : "MIT License",
+                url  : "http://www.opensource.org/licenses/mit-license.php"
+        ],
+        developer      : [
+                name : "Bruno de Lima e Silva",
+                email: "dlimaun@gmail.com"
+        ]
 ]
 apply from: rootProject.file('gradle/publish.gradle')
