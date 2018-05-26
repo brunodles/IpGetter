@@ -58,7 +58,7 @@ buildscript {
         classpath 'com.brunodles:ipgetter:1.1.0'
     }
 }
-apply plugin: 'com.github.brunodles.IpGetter'
+apply plugin: 'ipgetter'
 android {
     ...
     defaultConfig {
