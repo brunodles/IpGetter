@@ -29,8 +29,8 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compileOnly 'com.brunodles:autoplugin-annotation:1.0.1'
-    apt 'com.brunodles:autoplugin-processor:1.0.1'
+    compileOnly 'com.brunodles:autoplugin-annotation:1.1.0'
+    apt 'com.brunodles:autoplugin-processor:1.1.0'
 
     testCompile 'junit:junit:4.11'
 
