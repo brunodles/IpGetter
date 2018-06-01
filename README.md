@@ -54,14 +54,11 @@ Here is a sample of how the `build.gradle` will end up.
 
 ```gradle
 buildscript {
-    repositories {
-        maven { url "https://dl.bintray.com/brunodles/TempRepo" }
-    }
     dependencies {
-        classpath 'com.github.brunodles:IpGetter:1.1.0'
+        classpath 'com.brunodles:ipgetter:1.1.0'
     }
 }
-apply plugin: 'com.github.brunodles.IpGetter'
+apply plugin: 'ipgetter'
 android {
     ...
     defaultConfig {
