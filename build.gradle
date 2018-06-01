@@ -22,7 +22,6 @@ compileGroovy {
 }
 
 repositories {
-    maven { url "https://dl.bintray.com/brunodles/TempRepo/" }
     jcenter()
     mavenCentral()
 }
