@@ -50,7 +50,6 @@ ext.scripter = [
         'gradle/scripter.gradle': 'https://raw.githubusercontent.com/brunodles/GradleHelpers/master/scripter/scripter.gradle',
         'gradle/publish.gradle' : 'https://raw.githubusercontent.com/brunodles/GradleHelpers/master/publish/single.gradle'
 ]
-apply from: rootProject.file("gradle/scripter.gradle")
 
 def gitPath = "github.com/brunodles/IpGetter"
 ext.publishing = [
@@ -75,4 +74,6 @@ ext.publishing = [
                 email: "dlimaun@gmail.com"
         ]
 ]
-apply from: rootProject.file('gradle/publish.gradle')
+
+if (rootProject.file("gradle/scripter.gradle").exists())
+    apply from: rootProject.file("gradle/scripter.gradle")
